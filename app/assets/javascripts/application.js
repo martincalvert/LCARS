@@ -13,4 +13,28 @@
 //= require jquery
 //= require jquery_ujs
 //= require semantic_ui/semantic_ui
+//= require vue
+//= require vue-router
+//= require vue-resource
+//= require vuex
+//= require status_component
 //= require_tree .
+
+Vue.use(VueRouter)
+Vue.use(VueResource)
+
+const routes = [
+  {
+    path: '/',
+    component: VComponents['status_component']
+  }
+]
+
+const router = new VueRouter({
+  routes
+})
+
+var app = new Vue({
+  data: { user: {} },
+  router,
+}).$mount('#app')

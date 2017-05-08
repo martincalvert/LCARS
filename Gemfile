@@ -7,6 +7,8 @@ source 'https://rubygems.org' do
   gem 'sass-rails'
   gem 'jquery-rails'
   gem 'uglifier'
+  gem 'sprockets-vue'
+  gem 'vuejs-rails'
 
   gem 'libv8'
   gem 'therubyracer'
@@ -19,7 +21,6 @@ source 'https://rubygems.org' do
   gem 'rack'
 
   ## random
-  gem 'haml'
   gem 'json'
   gem 'httparty'
   gem 'bourbon'
