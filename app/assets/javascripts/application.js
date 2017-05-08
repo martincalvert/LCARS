@@ -26,6 +26,12 @@ Vue.use(VueResource)
 const routes = [
   {
     path: '/',
+    name: 'status',
+    component: VComponents['status_component']
+  },
+  {
+    path: '/',
+    name: 'errors',
     component: VComponents['status_component']
   }
 ]

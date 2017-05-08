@@ -6,12 +6,14 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <nav>
-      <div class="ui secondary pointing menu">
-        <router-link class="item" :to="{name: 'status'}">Status</router-link>
-        <router-link class="item" :to="{name: 'errors'}">Errors</router-link>
-      </div>
-    <%= yield %>
+    <div id="app">
+      <nav>
+        <div class="ui secondary pointing menu">
+          <router-link class="item" :to="{name: 'status'}">Status</router-link>
+          <router-link class="item" :to="{name: 'errors'}">Errors</router-link>
+        </div>
+      <%= yield %>
+    </div>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   </body>
 </html>

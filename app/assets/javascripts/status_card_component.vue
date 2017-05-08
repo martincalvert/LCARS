@@ -1,5 +1,5 @@
 <template>
-  <div class="ui card fluid">
+  <div class="ui card">
     <div class="image">
       <img src="/images/avatar2/large/matthew.png">
     </div>

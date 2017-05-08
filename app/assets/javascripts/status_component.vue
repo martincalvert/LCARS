@@ -5,7 +5,7 @@
     <div class="ui container column grid">
       <h1>Current Statuses</h1>
     </div>
-    <div class="ui grid">
+    <div class="ui container grid">
       <div class="four wide column" v-for="card in cards">
         <card></card>
       </div>
