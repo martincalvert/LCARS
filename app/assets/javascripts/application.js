@@ -29,10 +29,15 @@ const routes = [
     name: 'status',
     component: VComponents['status_component']
   },
+  // {
+  //   path: '/',
+  //   name: 'errors',
+  //   component: VComponents['status_component']
+  // },
   {
-    path: '/',
-    name: 'errors',
-    component: VComponents['status_component']
+    path: '/apps',
+    name: 'apps',
+    component: VComponents['apps_component']
   }
 ]
 
@@ -44,3 +49,5 @@ var app = new Vue({
   data: { user: {} },
   router,
 }).$mount('#app')
+
+$('.ui.dropdown').dropdown();

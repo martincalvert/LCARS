@@ -6,8 +6,8 @@
       <h1>Current Statuses</h1>
     </div>
     <div class="ui container grid">
-      <div class="four wide column" v-for="card in cards">
-        <card></card>
+      <div class="four wide column" v-for="app in apps">
+        <card :app="app"></card>
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@
     name: 'status',
     data: function(){
       return {
-        cards: [1,2,3,4]
+        apps: [{appName: 'Varnish', appStatus: 'UP'}]
       }
     },
     components: {

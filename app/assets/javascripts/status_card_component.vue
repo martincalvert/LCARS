@@ -1,12 +1,10 @@
 <template>
-  <div class="ui card">
-    <div class="image">
-      <img src="/images/avatar2/large/matthew.png">
-    </div>
+  <div class="ui nagative card">
     <div class="content">
-      <div class="header">App name</div>
+      <div class="header">{{app.appName}}</div>
       <div class="meta">
-        <a>UP/DOWN</a>
+        <a>{{app.appStatus}}</a>
+        <i class="smile icon red"></i>
       </div>
     </div>
     <div class="extra content">
@@ -22,6 +20,7 @@
     name: 'status_card',
     data: function(){
       return {}
-    }
+    },
+    props: ['app'],
   }
 </script>

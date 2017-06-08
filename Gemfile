@@ -1,38 +1,35 @@
 source 'https://rubygems.org' do
   gem 'rails', '~> 5.0'
 
-  gem 'less-rails-semantic_ui'
   gem 'autoprefixer-rails'
-
-  gem 'sass-rails'
   gem 'jquery-rails'
-  gem 'uglifier'
+  gem 'less-rails-semantic_ui'
+  gem 'libv8'
+  gem 'sass-rails'
   gem 'sprockets-vue'
+  gem 'therubyracer'
+  gem 'uglifier'
   gem 'vuejs-rails'
 
-  gem 'libv8'
-  gem 'therubyracer'
-
-  gem 'mongoid'
   gem 'mongo'
+  gem 'mongoid'
   gem 'symmetric-encryption'
 
-  gem 'unicorn'
   gem 'rack'
+  gem 'unicorn'
 
   ## random
-  gem 'json'
-  gem 'httparty'
   gem 'bourbon'
+  gem 'httparty'
+  gem 'json'
 
   ## development, test-only gems
   group :development, :test do
     gem 'byebug'
-    gem 'pry' # for sweet ruby debugging!
-    gem 'pry-theme' # for sweet syntax highlighting in pry
+    gem 'pry'
     gem 'pry-nav'
-    gem 'spring-commands-testunit'
-    gem 'awesome_print'
+    gem 'pry-theme'
     gem 'rubocop'
+    gem 'spring-commands-testunit'
   end
 end
