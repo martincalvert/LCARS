@@ -22,10 +22,20 @@ class AppServicesController < ApplicationController
   end
 
   def create
+    # TODO: Check boolean stuff and uris
+    binding.pry
     if app = AppService.create(app_service_params)
       render json: { saved: true, app: app.to_json }
     else
       render json: { saved: false, error: true }
+    end
+  end
+
+  def destroy
+    if app = AppService.find(params[:app][:id]) and app.destroy
+      render json: { deleted: true, errors: [] }
+    else
+      render json: { deleted: false, errors: app.errors }
     end
   end
 

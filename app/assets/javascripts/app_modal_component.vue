@@ -37,11 +37,17 @@
             <label>Expected Response Body</label>
             <input type="text" v-model="app.expected_response_body">
           </div>
+          <div class="inline field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" tabindex="0" class="hidden" v-model="app.enabled">
+              <label>Toggle</label>
+            </div>
+          </div>
         </form>
       </div>
     </div>
     <div class="actions">
-      <div class="ui red right labeled icon button">
+      <div class="ui red right labeled icon button" v-on:click="cancelApp">
         Cancel
         <i class="remove icon"></i>
       </div>
@@ -63,9 +69,30 @@
           uris: [''],
           expected_response_code: 200,
           expected_response_format: 'json',
-          expected_response_body: null
+          expected_response_body: null,
+          enabled: false,
+          _id: null
          }
       }
+    },
+    props: ['passedApp'],
+    created: function(){
+      console.log('pp')
+      if (this.passedApp !== null) {
+        console.log('llll')
+        this.app._id = this.passedApp._id;
+        this.app.name = this.passedApp.name;
+        this.app.uris = this.passedApp.uris;
+        this.app.expected_response_code = this.passedApp.expected_response_code;
+        this.app.expected_response_body = this.passedApp.expected_response_body;
+        this.app.expected_response_format = this.passedApp.expected_response_format;
+        this.app.enabled = this.passedApp.enabled
+      }
+    },
+    mounted: function() {
+      $('.ui.dropdown').dropdown();
+      $('.ui.checkbox').checkbox();
+      $('.ui.modal').modal('show');
     },
     methods: {
       saveApp: function() {
@@ -92,6 +119,10 @@
         this.app.expected_response_code = 200
         this.app.expected_response_format = 'json'
         this.app.expected_response_body = null
+      },
+      cancelApp: function() {
+        this.appReset()
+        $('.ui.modal').modal('hide');
       }
     }
   }

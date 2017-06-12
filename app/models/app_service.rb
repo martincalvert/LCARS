@@ -6,8 +6,10 @@ class AppService
   field :expected_response_code, type: Integer, default: '200'
   field :expected_response_format, type: String, default: 'json'
   field :expected_response_body, type: String
+  field :enabled, type: Boolean, default: false
+  field :environment, type: String
 
   def self.permitted_fields
-    %i(name uris expected_response_code expected_response_format expected_response_body)
+    %i(name uris expected_response_code expected_response_format expected_response_body environment enabled)
   end
 end

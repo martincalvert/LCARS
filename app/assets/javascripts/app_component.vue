@@ -17,7 +17,20 @@
       {{app.expected_response_format}}
     </td>
     <td>
-      {{app.expected_response_body}}
+      {{app.environment}}
+    </td>
+    <td>
+      {{app.enabled}}
+    </td>
+    <td>
+      <div class="actions">
+        <div class="ui orange icon button" v-on:click="emit('delete')">
+          <i class="trash icon"></i>
+        </div>
+        <div class="ui teal icon button" v-on:click="emit('edit')">
+          <i class="edit icon"></i>
+        </div>
+      </div>
     </td>
   </tr>
 </template>
@@ -29,5 +42,10 @@
       return {}
     },
     props: ['app'],
+    methods: {
+      emit: function(action) {
+        this.$emit(action, this.app)
+      }
+    }
   }
 </script>

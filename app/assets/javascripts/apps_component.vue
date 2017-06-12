@@ -17,16 +17,18 @@
               <th>URIs</th>
               <th>Response Code</th>
               <th>Response Format</th>
-              <th>Response Body</th>
+              <th>Environment</th>
+              <th>Enabled</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <appRow v-for="app in apps" :app="app"></appRow>
+            <appRow v-for="app in apps" :app="app" v-on:edit="setPassed"></appRow>
           </tbody>
         </table>
       </div>
     </div>
-    <appModal v-on:saved="updateApps"></appModal>
+    <appModal :passedApp="passedApp" v-on:saved="updateApps" v-if="showModal"></appModal>
   </div>
 </template>
 
@@ -38,6 +40,8 @@
     data: function(){
       return {
         apps: [],
+        passedApp: null,
+        showModal: false,
         loading: false
       }
     }, created: function() {
@@ -52,11 +56,16 @@
         })
       },
       addApp: function() {
-        $('.ui.modal').modal('show');
+        this.showModal = true;
       },
       updateApps: function(app) {
         let t = JSON.parse(app)
         this.apps.push(t)
+        this.showModal = false
+      },
+      setPassed: function(app) {
+        this.passedApp = this.apps.find(x => x._id.$oid == app._id.$oid);
+        this.showModal = true
       }
     },
     components: {
