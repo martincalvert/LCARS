@@ -51,3 +51,4 @@ var app = new Vue({
 }).$mount('#app')
 
 $('.ui.dropdown').dropdown();
+$('.ui.checkbox').checkbox();

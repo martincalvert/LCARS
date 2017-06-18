@@ -17,16 +17,20 @@
               <th>URIs</th>
               <th>Response Code</th>
               <th>Response Format</th>
-              <th>Response Body</th>
+              <th>Environment</th>
+              <th>Enabled</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <appRow v-for="app in apps" :app="app"></appRow>
+            <appRow v-for="app in apps" :app="app" v-on:edit="setPassed" v-on:delete="deleteApp"></appRow>
           </tbody>
         </table>
       </div>
     </div>
-    <appModal v-on:saved="updateApps"></appModal>
+    <keep-alive>
+      <appModal :passedApp="passedApp" v-on:cancel="cancel" v-on:saved="updateApps" v-if="showModal"></appModal>
+    </keep-alive>
   </div>
 </template>
 
@@ -38,6 +42,8 @@
     data: function(){
       return {
         apps: [],
+        passedApp: null,
+        showModal: false,
         loading: false
       }
     }, created: function() {
@@ -48,15 +54,36 @@
           this.apps = response.body.apps
           this.loading = false
         }, (response) => {
-          this.error = 'Failed to load profile'
+          this.error = 'Failed to load app'
         })
       },
+      cancel: function(){
+        this.showModal = false;
+        this.passedApp = null;
+      },
       addApp: function() {
-        $('.ui.modal').modal('show');
+        this.showModal = true;
       },
       updateApps: function(app) {
-        let t = JSON.parse(app)
-        this.apps.push(t)
+        let t = JSON.parse(app);
+        this.apps.push(t);
+        this.showModal = false;
+      },
+      setPassed: function(app) {
+        this.passedApp = this.apps.find(x => x._id.$oid == app._id.$oid);
+        this.showModal = true;
+      },
+      deleteApp: function(app) {
+        let token = document.head.querySelector("[name=csrf-token]").content;
+        Vue.http.headers.common['X-CSRF-Token'] = token;
+        this.$http.delete('/api/v1/apps', {'headers': {'X-APP-ID': app._id.$oid}}).then((response) => {
+          if(response.body.deleted){
+            let index = this.apps.findIndex(x => x._id.$oid == app._id.$oid)
+            this.apps.splice(index, 1)
+          }
+        }, (response) => {
+          this.error = 'Failed to delete app'
+        })
       }
     },
     components: {

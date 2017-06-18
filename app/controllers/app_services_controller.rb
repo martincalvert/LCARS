@@ -21,17 +21,34 @@ class AppServicesController < ApplicationController
     end
   end
 
-  def create
-    if app = AppService.create(app_service_params)
+  def save
+    app = if id = app_service_params['_id']
+            AppService.find(id)
+          else
+            AppService.create(app_service_params)
+          end
+    if app.present?
       render json: { saved: true, app: app.to_json }
     else
       render json: { saved: false, error: true }
     end
   end
 
+  def destroy
+    if app = AppService.find(destroy_id) and app.destroy!
+      render json: { deleted: true, errors: [] }
+    else
+      render json: { deleted: false, errors: app.errors }
+    end
+  end
+
   private
 
   def app_service_params
-    params.require(:app).permit(AppService.permitted_fields)
+    params.require(:app).permit(AppService.permitted_fields, uris: [], _id: {}).to_h
+  end
+
+  def destroy_id
+    request.headers['X-APP-ID']
   end
 end
