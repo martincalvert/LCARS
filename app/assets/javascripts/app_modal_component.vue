@@ -39,7 +39,7 @@
           </div>
           <div class="inline field">
             <div class="ui toggle checkbox">
-              <input type="checkbox" tabindex="0" class="hidden" v-model="app.enabled">
+              <input type="checkbox" tabindex="0" v-on:change="enabler">
               <label>Toggle</label>
             </div>
           </div>
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="actions">
-      <div class="ui red right labeled icon button" v-on:click="cancelApp">
+      <div class="ui cancel red right labeled icon button">
         Cancel
         <i class="remove icon"></i>
       </div>
@@ -76,10 +76,19 @@
       }
     },
     props: ['passedApp'],
-    created: function(){
-      console.log('pp')
+    mounted: function() {
+      let v = this
+      $('.ui.dropdown').dropdown();
+      $('.ui.checkbox').checkbox();
+      $('.ui.modal').modal({
+        onHide: function(){
+          let t = v
+          t.$emit('cancel')
+        }
+      })
+    },
+    activated: function() {
       if (this.passedApp !== null) {
-        console.log('llll')
         this.app._id = this.passedApp._id;
         this.app.name = this.passedApp.name;
         this.app.uris = this.passedApp.uris;
@@ -87,21 +96,26 @@
         this.app.expected_response_body = this.passedApp.expected_response_body;
         this.app.expected_response_format = this.passedApp.expected_response_format;
         this.app.enabled = this.passedApp.enabled
+        if (this.app.enabled) {
+          $('.ui.checkbox').checkbox('set checked');
+        } else {
+          $('.ui.checkbox').checkbox('set unchecked');
+        }
+      } else {
+        this.appReset()
       }
-    },
-    mounted: function() {
-      $('.ui.dropdown').dropdown();
-      $('.ui.checkbox').checkbox();
       $('.ui.modal').modal('show');
     },
     methods: {
+      enabler: function() {
+        this.app.enabled = !this.app.enabled;
+      },
       saveApp: function() {
         let token = document.head.querySelector("[name=csrf-token]").content;
         this.$http.post('api/v1/apps', {'authenticity_token': token, 'app': this.app}).then((response) => {
           if(response.body.saved){
-            this.appReset()
-            this.$emit('saved', response.body.app)
             $('.ui.modal').modal('hide')
+            this.$emit('saved', response.body.app)
           } else {
             this.error = 'Failure saving'
           }

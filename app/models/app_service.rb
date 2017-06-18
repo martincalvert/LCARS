@@ -10,6 +10,6 @@ class AppService
   field :environment, type: String
 
   def self.permitted_fields
-    %i(name uris expected_response_code expected_response_format expected_response_body environment enabled)
+    %i(name expected_response_code expected_response_format expected_response_body environment enabled)
   end
 end

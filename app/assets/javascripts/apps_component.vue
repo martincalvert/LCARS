@@ -23,12 +23,14 @@
             </tr>
           </thead>
           <tbody>
-            <appRow v-for="app in apps" :app="app" v-on:edit="setPassed"></appRow>
+            <appRow v-for="app in apps" :app="app" v-on:edit="setPassed" v-on:delete="deleteApp"></appRow>
           </tbody>
         </table>
       </div>
     </div>
-    <appModal :passedApp="passedApp" v-on:saved="updateApps" v-if="showModal"></appModal>
+    <keep-alive>
+      <appModal :passedApp="passedApp" v-on:cancel="cancel" v-on:saved="updateApps" v-if="showModal"></appModal>
+    </keep-alive>
   </div>
 </template>
 
@@ -52,20 +54,36 @@
           this.apps = response.body.apps
           this.loading = false
         }, (response) => {
-          this.error = 'Failed to load profile'
+          this.error = 'Failed to load app'
         })
+      },
+      cancel: function(){
+        this.showModal = false;
+        this.passedApp = null;
       },
       addApp: function() {
         this.showModal = true;
       },
       updateApps: function(app) {
-        let t = JSON.parse(app)
-        this.apps.push(t)
-        this.showModal = false
+        let t = JSON.parse(app);
+        this.apps.push(t);
+        this.showModal = false;
       },
       setPassed: function(app) {
         this.passedApp = this.apps.find(x => x._id.$oid == app._id.$oid);
-        this.showModal = true
+        this.showModal = true;
+      },
+      deleteApp: function(app) {
+        let token = document.head.querySelector("[name=csrf-token]").content;
+        Vue.http.headers.common['X-CSRF-Token'] = token;
+        this.$http.delete('/api/v1/apps', {'headers': {'X-APP-ID': app._id.$oid}}).then((response) => {
+          if(response.body.deleted){
+            let index = this.apps.findIndex(x => x._id.$oid == app._id.$oid)
+            this.apps.splice(index, 1)
+          }
+        }, (response) => {
+          this.error = 'Failed to delete app'
+        })
       }
     },
     components: {
