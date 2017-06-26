@@ -38,6 +38,11 @@ const routes = [
     path: '/apps',
     name: 'apps',
     component: VComponents['apps_component']
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: VComponents['settings_component']
   }
 ]
 
