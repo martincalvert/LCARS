@@ -1,11 +1,21 @@
 <template>
   <div class="ui grid">
+    <div class="ui active modal" v-if="loading">
+      <div class="ui active inverted dimmer">
+        <div class="ui text loader">Loading</div>
+      </div>
+    </div>
     <div class="row">
       <div class="eight wide column centered">
         <div class="row single line">
           <h1>
             Settings
           </h1>
+        </div>
+        <div class="row" v-if="status_message">
+          <div class="two wide column centered">
+            <div class="ui green segment raised">{{status_message}}</div>
+          </div>
         </div>
         <form class="ui form">
           <div class="field">
@@ -48,7 +58,8 @@
           check_duration: 10,
           envs: []
         },
-        loading: true
+        loading: true,
+        status_message: null
       }
     }, created: function() {
       this.loadSettings()
@@ -67,7 +78,7 @@
         this.$http.post('/api/v1/settings', {'authenticity_token': token, 'settings': this.settings}).then((response) => {
           this.status_message = 'Saved Settings'
         }, (response) => {
-          this.error = 'Failed to save settings'
+          this.status_message = 'Failed to save settings'
         })
       }
     },

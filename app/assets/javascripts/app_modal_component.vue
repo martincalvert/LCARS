@@ -4,6 +4,11 @@
     <div class="header">
       App: {{ app.name }}
     </div>
+    <div class="row" v-if="status_message">
+      <div class="two wide column centered">
+        <div class="ui green segment raised">{{status_message}}</div>
+      </div>
+    </div>
     <div class="image content">
       <div class="description">
         <form class="ui form">
@@ -13,9 +18,7 @@
           </div>
           <div class="field">
             <label>URIs <i class="plus icon" v-on:click="addUri"></i></label>
-            <div v-for="n in app.uris.length" :key="app.uris.id">
-              <input type="url" v-model="app.uris[n-1]">
-            </div>
+            <input v-for="n in app.uris.length" type="url" v-model="app.uris[n-1]">
           </div>
           <div class="field">
             <label>Expected Response Code</label>
@@ -24,12 +27,23 @@
           <div class="field">
             <label>Expected Response Format</label>
             <div class="ui selection dropdown">
-              <div class="default text">Select</div>
+              <div class="default text">Select Type</div>
               <i class="dropdown icon"></i>
               <input type="hidden" v-model="app.expected_response_format">
               <div class="menu">
-                <div class="item" data-value="json">JSON</div>
-                <div class="item" data-value="xml">XML</div>
+                <div class="item" data-value="json" v-on:click="setFormat('json')">JSON</div>
+                <div class="item" data-value="xml" v-on:click="setFormat('xml')">XML</div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Environment</label>
+            <div class="ui selection dropdown">
+              <div class="default text">Select Environment</div>
+              <i class="dropdown icon"></i>
+              <input type="hidden">
+              <div class="menu">
+                <div class="item" v-for="env in environments" :data-value="env" v-on:click="setEnv(env)">{{env}}</div>
               </div>
             </div>
           </div>
@@ -71,8 +85,12 @@
           expected_response_format: 'json',
           expected_response_body: null,
           enabled: false,
+          environment: null,
           _id: null
-         }
+        },
+        loading: true,
+        environments: [],
+        status_message: null
       }
     },
     props: ['passedApp'],
@@ -88,6 +106,7 @@
       })
     },
     activated: function() {
+      this.fetchEnvironments()
       if (this.passedApp !== null) {
         this.app._id = this.passedApp._id;
         this.app.name = this.passedApp.name;
@@ -95,12 +114,8 @@
         this.app.expected_response_code = this.passedApp.expected_response_code;
         this.app.expected_response_body = this.passedApp.expected_response_body;
         this.app.expected_response_format = this.passedApp.expected_response_format;
-        this.app.enabled = this.passedApp.enabled
-        if (this.app.enabled) {
-          $('.ui.checkbox').checkbox('set checked');
-        } else {
-          $('.ui.checkbox').checkbox('set unchecked');
-        }
+        this.app.enabled = this.passedApp.enabled;
+        this.app.environment = this.passedApp.environment;
       } else {
         this.appReset()
       }
@@ -117,15 +132,27 @@
             $('.ui.modal').modal('hide')
             this.$emit('saved', response.body.app)
           } else {
-            this.error = 'Failure saving'
+            this.status_message = 'Failure saving'
           }
         }, (response) => {
           // FAILURE
-          this.error = 'Post fail'
+          this.status_message = 'Post fail'
+        })
+      },
+      fetchEnvironments: function(){
+        this.$http.get('/api/v1/settings').then((response) => {
+          this.environments = response.body.settings.envs
+          this.loading = false
         })
       },
       addUri: function() {
         this.app.uris.push('')
+      },
+      setEnv: function(env){
+        this.app.environment = env;
+      },
+      setFormat: function(format){
+        this.app.expected_response_format = format;
       },
       appReset: function() {
         this.app.name = null
