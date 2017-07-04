@@ -25,9 +25,9 @@ Vue.use(VueResource)
 
 const routes = [
   {
-    path: '/',
-    name: 'status',
-    component: VComponents['status_component']
+    path: "/",
+    name: "status",
+    component: VComponents["status_component"]
   },
   // {
   //   path: '/',
@@ -35,20 +35,20 @@ const routes = [
   //   component: VComponents['status_component']
   // },
   {
-    path: '/apps',
-    name: 'apps',
-    component: VComponents['apps_component']
+    path: "/apps",
+    name: "apps",
+    component: VComponents["apps_component"]
   }
-]
+];
 
 const router = new VueRouter({
   routes
-})
+});
 
 var app = new Vue({
   data: { user: {} },
   router,
-}).$mount('#app')
+}).$mount("#app");
 
-$('.ui.dropdown').dropdown();
-$('.ui.checkbox').checkbox();
+$(".ui.dropdown").dropdown();
+$(".ui.checkbox").checkbox();
