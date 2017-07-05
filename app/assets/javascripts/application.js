@@ -20,8 +20,8 @@
 //= require status_component
 //= require_tree .
 
-Vue.use(VueRouter)
-Vue.use(VueResource)
+Vue.use(VueRouter);
+Vue.use(VueResource);
 
 const routes = [
   {
