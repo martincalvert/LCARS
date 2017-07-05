@@ -35,10 +35,10 @@
 </template>
 
 <script>
-  var appRow = VComponents['app_component']
-  var appModal = VComponents['app_modal_component']
+  var appRow = VComponents["app_component"];
+  var appModal = VComponents["app_modal_component"];
   module.exports = {
-    name: 'apps',
+    name: "apps",
     data: function(){
       return {
         apps: [],
@@ -47,14 +47,14 @@
         loading: false
       }
     }, created: function() {
-      this.loadApps()
+      this.loadApps();
     }, methods: {
       loadApps: function() {
-        this.$http.get('/api/v1/apps').then((response) => {
-          this.apps = response.body.apps
-          this.loading = false
+        this.$http.get("/api/v1/apps").then((response) => {
+          this.apps = response.body.apps;
+          this.loading = false;
         }, (response) => {
-          this.error = 'Failed to load app'
+          this.error = "Failed to load app";
         })
       },
       cancel: function(){
@@ -75,20 +75,20 @@
       },
       deleteApp: function(app) {
         let token = document.head.querySelector("[name=csrf-token]").content;
-        Vue.http.headers.common['X-CSRF-Token'] = token;
-        this.$http.delete('/api/v1/apps', {'headers': {'X-APP-ID': app._id.$oid}}).then((response) => {
+        Vue.http.headers.common["X-CSRF-Token"] = token;
+        this.$http.delete("/api/v1/apps", {"headers": {"X-APP-ID": app._id.$oid}}).then((response) => {
           if(response.body.deleted){
-            let index = this.apps.findIndex(x => x._id.$oid == app._id.$oid)
-            this.apps.splice(index, 1)
+            let index = this.apps.findIndex(x => x._id.$oid == app._id.$oid);
+            this.apps.splice(index, 1);
           }
         }, (response) => {
-          this.error = 'Failed to delete app'
+          this.error = 'Failed to delete app';
         })
       }
     },
     components: {
-      'appRow': appRow,
-      'appModal': appModal
+      "appRow": appRow,
+      "appModal": appModal
     }
   }
 </script>
