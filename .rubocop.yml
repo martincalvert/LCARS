@@ -17,7 +17,12 @@ Metrics/BlockLength:
     - '**/*.rake'
 Metrics/LineLength:
   Max: 160
+Metrics/MethodLength:
+  Max: 100
 
 # Style
 Style/AndOr:
   Enabled: false
+Style/Documentation:
+  Exclude:
+    - 'app/controllers/*'

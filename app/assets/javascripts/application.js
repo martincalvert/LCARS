@@ -35,9 +35,9 @@ const routes = [
   //   component: VComponents['status_component']
   // },
   {
-    path: '/settings',
-    name: 'settings',
-    component: VComponents['settings_component']
+    path: "/settings",
+    name: "settings",
+    component: VComponents["settings_component"]
   },
   {
     path: "/apps",
