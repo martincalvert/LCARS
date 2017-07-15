@@ -7,6 +7,6 @@ class Setting
   field :check_duration, type: Integer, default: 10
 
   def self.permitted_fields
-    %i[name env check_duration]
+    %i[name envs check_duration]
   end
 end
