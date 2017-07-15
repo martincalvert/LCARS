@@ -17,6 +17,5 @@ Bundler.require(*Rails.groups)
 
 module LCARS
   class Application < Rails::Application
-    defaults = {}
   end
 end
