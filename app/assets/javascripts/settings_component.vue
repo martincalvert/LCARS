@@ -71,12 +71,14 @@
         this.$http.get('/api/v1/settings').then((response) => {
           this.settings = response.body.settings
           this.loading = false
+        }, (response) => {
+          this.loading = false
         })
       },
       saveSettings: function() {
         let token = document.head.querySelector("[name=csrf-token]").content;
         this.$http.post('/api/v1/settings', {'authenticity_token': token, 'settings': this.settings}).then((response) => {
-          this.status_message = 'Saved Settings'
+          this.status_message = 'Settings Saved'
         }, (response) => {
           this.status_message = 'Failed to save settings'
         })

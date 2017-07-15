@@ -30,6 +30,5 @@ source 'https://rubygems.org' do
     gem 'pry-nav'
     gem 'pry-theme'
     gem 'rubocop'
-    gem 'spring-commands-testunit'
   end
 end

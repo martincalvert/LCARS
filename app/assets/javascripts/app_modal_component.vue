@@ -75,14 +75,14 @@
 
 <script>
   module.exports = {
-    name: 'appModal',
+    name: "appModal",
     data: function(){
       return {
         app: {
           name: null,
           uris: [''],
           expected_response_code: 200,
-          expected_response_format: 'json',
+          expected_response_format: "json",
           expected_response_body: null,
           enabled: false,
           environment: null,
@@ -93,17 +93,17 @@
         status_message: null
       }
     },
-    props: ['passedApp'],
+    props: ["passedApp"],
     mounted: function() {
-      let v = this
-      $('.ui.dropdown').dropdown();
-      $('.ui.checkbox').checkbox();
-      $('.ui.modal').modal({
+      let v = this;
+      $(".ui.dropdown").dropdown();
+      $(".ui.checkbox").checkbox();
+      $(".ui.modal").modal({
         onHide: function(){
-          let t = v
-          t.$emit('cancel')
+          let t = v;
+          t.$emit("cancel");
         }
-      })
+      });
     },
     activated: function() {
       this.fetchEnvironments()
@@ -116,10 +116,15 @@
         this.app.expected_response_format = this.passedApp.expected_response_format;
         this.app.enabled = this.passedApp.enabled;
         this.app.environment = this.passedApp.environment;
+        if (this.app.enabled) {
+          $(".ui.checkbox").checkbox("set checked");
+        } else {
+          $(".ui.checkbox").checkbox("set unchecked");
+        }
       } else {
-        this.appReset()
+        this.appReset();
       }
-      $('.ui.modal').modal('show');
+      $(".ui.modal").modal("show");
     },
     methods: {
       enabler: function() {
@@ -127,10 +132,10 @@
       },
       saveApp: function() {
         let token = document.head.querySelector("[name=csrf-token]").content;
-        this.$http.post('api/v1/apps', {'authenticity_token': token, 'app': this.app}).then((response) => {
+        this.$http.post("api/v1/apps", {"authenticity_token": token, "app": this.app}).then((response) => {
           if(response.body.saved){
-            $('.ui.modal').modal('hide')
-            this.$emit('saved', response.body.app)
+            $(".ui.modal").modal("hide");
+            this.$emit('saved', response.body.app);
           } else {
             this.status_message = 'Failure saving'
           }
@@ -143,10 +148,19 @@
         this.$http.get('/api/v1/settings').then((response) => {
           this.environments = response.body.settings.envs
           this.loading = false
+        }, (response) => {
+          // FAILURE
+          this.error = "Post fail";
         })
       },
       addUri: function() {
-        this.app.uris.push('')
+        this.app.uris.push("");
+      },
+      setEnv: function(env){
+        this.app.environment = env;
+      },
+      setFormat: function(format){
+        this.app.expected_response_format = format;
       },
       setEnv: function(env){
         this.app.environment = env;
@@ -155,15 +169,15 @@
         this.app.expected_response_format = format;
       },
       appReset: function() {
-        this.app.name = null
-        this.app.uris = ['']
-        this.app.expected_response_code = 200
-        this.app.expected_response_format = 'json'
-        this.app.expected_response_body = null
+        this.app.name = null;
+        this.app.uris = [""];
+        this.app.expected_response_code = 200;
+        this.app.expected_response_format = "json";
+        this.app.expected_response_body = null;
       },
       cancelApp: function() {
-        this.appReset()
-        $('.ui.modal').modal('hide');
+        this.appReset();
+        $(".ui.modal").modal("hide");
       }
     }
   }

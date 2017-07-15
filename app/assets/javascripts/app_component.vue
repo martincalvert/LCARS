@@ -37,14 +37,14 @@
 
 <script>
   module.exports = {
-    name: 'app',
+    name: "app",
     data: function(){
       return {}
     },
-    props: ['app'],
+    props: ["app"],
     methods: {
       emit: function(action) {
-        this.$emit(action, this.app)
+        this.$emit(action, this.app);
       }
     }
   }
