@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/lcars
+    docker:
+      - image: ruby:2.3.4
+      - image: mongo:3.4
+    steps:
+      - checkout
+
+      # Restore bundle cache
+      - type: cache-restore
+        key: rails-demo-{{ checksum "Gemfile.lock" }}
+
+      # Bundle install dependencies
+      - run: bundle install --path vendor/bundle
+
+      # Store bundle cache
+      - type: cache-save
+        key: rails-demo-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+
+      # Run rspec in parallel
+      - type: shell
+        command: |
+          bin/rails test

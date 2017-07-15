@@ -1,5 +1,15 @@
 <template>
   <div class="ui grid">
+    <div class="ui active modal" v-if="loading">
+      <div class="ui active inverted dimmer">
+        <div class="ui text loader">Loading</div>
+      </div>
+    </div>
+    <div class="row" v-if="status_message">
+      <div class="two wide column centered">
+        <div class="ui green segment raised">{{status_message}}</div>
+      </div>
+    </div>
     <div class="row">
       <div class="twelve wide column centered">
         <div class="row single line">
@@ -44,7 +54,8 @@
         apps: [],
         passedApp: null,
         showModal: false,
-        loading: false
+        loading: true,
+        status_message: null
       }
     }, created: function() {
       this.loadApps();
@@ -54,7 +65,7 @@
           this.apps = response.body.apps;
           this.loading = false;
         }, (response) => {
-          this.error = "Failed to load app";
+          this.status_message = 'Failed to load apps'
         })
       },
       cancel: function(){
@@ -82,7 +93,7 @@
             this.apps.splice(index, 1);
           }
         }, (response) => {
-          this.error = 'Failed to delete app';
+          this.status_message = 'Failed to delete app'
         })
       }
     },
