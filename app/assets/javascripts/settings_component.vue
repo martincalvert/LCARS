@@ -1,11 +1,12 @@
 <template>
   <div class="ui grid">
+    <div class="ui divider horizontal"></div>
     <div class="ui active modal" v-if="loading">
       <div class="ui active inverted dimmer">
         <div class="ui text loader">Loading</div>
       </div>
     </div>
-    <div class="row">
+    <div class="row" v-bind:class="{ 'blurred_items': loading }">
       <div class="eight wide column centered">
         <div class="row single line">
           <h1>

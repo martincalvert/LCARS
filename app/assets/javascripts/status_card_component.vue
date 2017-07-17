@@ -1,16 +1,15 @@
 <template>
-  <div class="ui nagative card">
+  <div class="ui fluid card" v-bind:class="{ 'green': app.alive, 'red': !app.alive }">
     <div class="content">
-      <div class="header">{{app.appName}}</div>
-      <div class="meta">
-        <a>{{app.appStatus}}</a>
-        <i class="smile icon red"></i>
+      <div class="header">{{app.app_name}}</div>
+      <div class="meta" v-if="app.alive">
+        <a>Alive</a>
+        <i class="thumbs up icon green"></i>
       </div>
-    </div>
-    <div class="extra content">
-      <span class="right floated">
-        Up since 2013
-      </span>
+      <div class="meta" v-if="!app.alive">
+        <a>Down</a>
+        <i class="thumbs down icon red"></i>
+      </div>
     </div>
   </div>
 </template>

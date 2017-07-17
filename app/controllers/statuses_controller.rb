@@ -4,42 +4,22 @@ class StatusesController < ApplicationController
   protect_from_forgery with: :exception
 
   def index
-    apps = Statuses.all.to_a
+    apps = Status.all.to_a
+    statuses = []
+    Setting.first.envs.each do |env|
+      temp = {}
+      temp[:env] = env
+      temp[:statuses] = apps.select { |app| app.env == env }
+      statuses << temp
+    end
     respond_to do |format|
       format.json do
-        render json: { apps: apps }
+        render json: { statuses: statuses }
       end
     end
   end
 
   def save
-    app = if id = app_service_params['_id']
-            AppService.find(id)
-          else
-            AppService.create(app_service_params)
-          end
-    if app.present?
-      render json: { saved: true, app: app.to_json }
-    else
-      render json: { saved: false, error: true }
-    end
-  end
-
-  def destroy
-    if app = AppService.find(destroy_id) and app.destroy!
-      render json: { deleted: true, errors: [] }
-    else
-      render json: { deleted: false, errors: app.errors }
-    end
-  end
-
-  private
-
-  def app_service_params
-    params.require(:app).permit(AppService.permitted_fields, uris: [], _id: {}).to_h
-  end
-
-  def destroy_id
-    request.headers['X-APP-ID']
+    render json: { sorry: 'This is not currently supported' }
   end
 end

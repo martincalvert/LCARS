@@ -1,13 +1,18 @@
 //= require status_card_component
 <template>
-  <div>
-    <div class="ui divider"></div>
-    <div class="ui container column grid">
-      <h1>Current Statuses</h1>
+  <div class="ui container">
+    <div class="ui divider horizontal"></div>
+    <h1>Current Statuses</h1>
+    <div class="ui active modal" v-if="loading">
+      <div class="ui active inverted dimmer">
+        <div class="ui text loader">Loading</div>
+      </div>
     </div>
-    <div class="ui container grid">
-      <div class="four wide column" v-for="app in apps">
-        <card :app="app"></card>
+    <div v-for="app in apps" :key="app.statuses" v-bind:class="{ 'blurred_items': loading }">
+      <div class="ui horizontal divider"></div>
+      <h2>{{ app.env }}</h2>
+      <div class="ui four cards" >
+        <card v-for="status in app.statuses" :app="status" :key="status.app_name"></card>
       </div>
     </div>
   </div>
@@ -19,8 +24,23 @@
     name: 'status',
     data: function(){
       return {
-        apps: [{appName: 'Varnish', appStatus: 'UP'}]
+        apps: [],
+        loading: true,
+        status_message: null
       }
+    },
+    created: function(){
+      this.loadStatuses();
+    },
+    methods: {
+      loadStatuses: function(){
+        this.$http.get('/api/v1/statuses/')
+                  .then(response => response.json())
+                  .then(json => {
+                    this.apps = json.statuses;
+                    this.loading = false;
+                  });
+        }
     },
     components: {
       'card': card
