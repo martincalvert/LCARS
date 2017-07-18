@@ -14,7 +14,7 @@
           </h1>
         </div>
         <div class="row" v-if="status_message">
-          <div class="two wide column centered">
+          <div class="six wide column centered">
             <div class="ui green segment raised">{{status_message}}</div>
           </div>
         </div>

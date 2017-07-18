@@ -1,3 +1,4 @@
+# Model to store the each apps current status
 class Status
   include Mongoid::Document
 
