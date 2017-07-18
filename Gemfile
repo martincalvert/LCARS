@@ -22,6 +22,7 @@ source 'https://rubygems.org' do
   gem 'bourbon'
   gem 'httparty'
   gem 'json'
+  gem 'rufus-scheduler'
 
   ## development, test-only gems
   group :development, :test do
