@@ -7,7 +7,13 @@ namespace :lcars do
     setting = Setting.first
 
     scheduler.every "#{setting.check_duration}s" do
-      AppService.where(enabled: true).each(&:fetch_status)
+      threads = []
+      AppService.where(enabled: true).each do |app|
+        threads << Thread.new do
+          app.fetch_status
+        end
+      end
+      threads.map(&:join)
     end
 
     scheduler.join
