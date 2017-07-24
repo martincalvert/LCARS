@@ -5,7 +5,7 @@
       App: {{ app.name }}
     </div>
     <div class="row" v-if="status_message">
-      <div class="two wide column centered">
+      <div class="six wide column centered">
         <div class="ui green segment raised">{{status_message}}</div>
       </div>
     </div>
@@ -155,6 +155,12 @@
       },
       addUri: function() {
         this.app.uris.push("");
+      },
+      setEnv: function(env){
+        this.app.environment = env;
+      },
+      setFormat: function(format){
+        this.app.expected_response_format = format;
       },
       setEnv: function(env){
         this.app.environment = env;

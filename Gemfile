@@ -10,6 +10,8 @@ source 'https://rubygems.org' do
   gem 'therubyracer'
   gem 'uglifier'
   gem 'vuejs-rails'
+  gem 'thread'
+  gem 'typhoeus'
 
   gem 'mongo'
   gem 'mongoid'
@@ -20,8 +22,8 @@ source 'https://rubygems.org' do
 
   ## random
   gem 'bourbon'
-  gem 'httparty'
   gem 'json'
+  gem 'rufus-scheduler'
 
   ## development, test-only gems
   group :development, :test do

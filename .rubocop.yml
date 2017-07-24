@@ -26,3 +26,5 @@ Style/AndOr:
 Style/Documentation:
   Exclude:
     - 'app/controllers/*'
+Style/RescueModifier:
+  Enabled: false
