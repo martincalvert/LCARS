@@ -23,7 +23,7 @@ class AppService
   end
 
   def create_status
-    Status.create(app_name: name, app_id: id, environment: environment)
+    Status.create(app_name: name, app_id: id, environment: environment, enabled: enabled)
   end
 
   def update_status
