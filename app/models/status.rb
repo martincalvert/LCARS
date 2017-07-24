@@ -4,6 +4,7 @@ class Status
 
   field :app_name, type: String
   field :app_id, type: BSON::ObjectId
-  field :env, type: String
+  field :environment, type: String
   field :alive, type: Boolean, default: false
+  field :enabled, type: Boolean, default: false
 end

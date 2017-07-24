@@ -11,6 +11,8 @@ class AppService
   field :environment, type: String
 
   before_destroy :delete_status
+  after_create :create_status
+  after_save :update_status
 
   def self.permitted_fields
     %i[name expected_response_code expected_response_format expected_response_body environment enabled]
@@ -20,15 +22,26 @@ class AppService
     status.delete
   end
 
+  def create_status
+    Status.create(app_name: name, app_id: id, environment: environment)
+  end
+
+  def update_status
+    status.environment = environment
+    status.app_name = name
+    status.enabled = enabled
+    status.save!
+  end
+
   def fetch_status
     uris.each do |url|
-      response = HTTParty.get(url) rescue false
+      response = Typhoeus.get(url) rescue false
       status.alive = response.respond_to?(:success?) ? response.success? : response
       status.save!
     end
   end
 
   def status
-    @status ||= Status.where(app_id: id).first || Status.new(app_name: name, app_id: id, env: environment)
+    @status ||= Status.where(app_id: id).first
   end
 end

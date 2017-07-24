@@ -4,21 +4,16 @@ class StatusesController < ApplicationController
   protect_from_forgery with: :exception
 
   def index
-    apps = Status.all.to_a
-    statuses = []
-    Setting.first.envs.each do |env|
-      temp = {}
-      temp[:env] = env
-      temp[:statuses] = apps.select { |app| app.env == env }
-      statuses << temp
-    end
+    params.permit(:environment)
+    apps = Status.where(enabled: true, environment: params[:environment]).to_a
     respond_to do |format|
       format.json do
-        render json: { statuses: statuses }
+        render json: { statuses: apps }
       end
     end
   end
 
+  # TODO: Allow statuses to be recieved and saved in case there is an outside source blocking a service
   def save
     render json: { sorry: 'This is not currently supported' }
   end

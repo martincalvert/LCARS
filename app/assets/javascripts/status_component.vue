@@ -8,11 +8,11 @@
         <div class="ui text loader">Loading</div>
       </div>
     </div>
-    <div v-for="app in apps" :key="app.statuses" v-bind:class="{ 'blurred_items': loading }">
+    <div v-for="(apps, environment) in allApps" :key="apps.length" v-bind:class="{ 'blurred_items': loading }">
       <div class="ui horizontal divider"></div>
-      <h2>{{ app.env }}</h2>
+      <h2>{{ environment }}</h2>
       <div class="ui four cards" >
-        <card v-for="status in app.statuses" :app="status" :key="status.app_name"></card>
+        <card v-for="app in apps" :app="app" :key="app.app_name"></card>
       </div>
     </div>
   </div>
@@ -24,21 +24,28 @@
     name: 'status',
     data: function(){
       return {
-        apps: [],
+        allApps: {},
         loading: true,
         status_message: null
       }
     },
     created: function(){
-      this.loadStatuses();
+      this.$http.get('/api/v1/settings')
+                .then(response => response.json())
+                .then(json => {
+                  this.environments = json.settings.envs;
+                  for (var env in this.environments){
+                    this.loadStatuses(this.environments[env]);
+                  }
+                  this.loading = false;
+                })
     },
     methods: {
-      loadStatuses: function(){
-        this.$http.get('/api/v1/statuses/')
+      loadStatuses: function(env){
+        this.$http.get('/api/v1/statuses/' + env)
                   .then(response => response.json())
                   .then(json => {
-                    this.apps = json.statuses;
-                    this.loading = false;
+                    this.$set(this.allApps, env, json.statuses);
                   });
         }
     },
