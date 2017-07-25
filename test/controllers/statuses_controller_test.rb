@@ -13,7 +13,10 @@ class StatusesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert body_json['statuses'].present?
 
-    status = body_json['statuses'].first
+    assert_equal body_json['statuses']['down'], 0
+    assert_equal body_json['statuses']['up'], 1
+
+    status = body_json['statuses']['apps'].first
 
     assert_equal status['app_name'], 'varnish'
     assert_equal status['app_id'], @id.as_json
@@ -25,6 +28,8 @@ class StatusesControllerTest < ActionDispatch::IntegrationTest
   test 'should return empty array if no statuses in env' do
     get '/api/v1/statuses/tester.json'
     assert_response :success
-    assert_equal body_json['statuses'].class, Array
+    assert_equal body_json['statuses']['apps'].class, Array
+    assert_equal body_json['statuses']['down'].class.superclass, Integer
+    assert_equal body_json['statuses']['up'].class.superclass, Integer
   end
 end

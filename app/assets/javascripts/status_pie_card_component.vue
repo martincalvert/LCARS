@@ -1,5 +1,5 @@
 <template>
-  <div class="ui fluid card">
+  <div class="ui fluid card" v-bind:class="{ 'green': apps.down == 0, 'red': apps.down != 0 }">
     <div class="content">
       <div class="header">{{environment}}</div>
       <canvas v-bind:id="environment + 'Chart'" width="400" height="400"></canvas>
@@ -13,25 +13,13 @@
     data: function(){
       return {
         rendered: false,
-        chartData: {}
+        chart: null
       }
     },
     mounted: function(){
       var ctx = document.getElementById(this.environment + "Chart").getContext('2d');
-      var data = {
-        datasets: [{
-            data: [10, 20, 30]
-        }],
-        //v-bind:class="{ 'green': app.alive, 'red': !app.alive }"
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Red',
-            'Yellow',
-            'Blue'
-        ]
-      }
       if(this.rendered == false){
-        var myPieChart = new Chart(ctx,{
+        this.chart = new Chart(ctx,{
             type: 'doughnut',
             data: this.createData(),
             options: {legend: {display: false}}
@@ -46,16 +34,7 @@
           datasets: [],
           labels: ['Up', 'Down'],
         }
-        var up = 0
-        var down = 0
-        for(var app in this.apps){
-          if (this.apps[app].alive){
-            up += 1
-          } else {
-            down += 1
-          }
-        }
-        data.datasets.push({data: [up, down], backgroundColor: ["rgb(9, 182, 33)","rgb(230, 0, 19)"]})
+        data.datasets.push({data: [this.apps.up, this.apps.down], backgroundColor: ["rgb(9, 182, 33)","rgb(230, 0, 19)"]})
         return data
       }
     }

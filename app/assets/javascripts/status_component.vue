@@ -23,13 +23,13 @@
       <div class="ui horizontal divider"></div>
       <h2>{{ environment }}</h2>
       <div class="ui six cards" >
-        <card v-for="app in apps" :app="app" :key="app.app_name"></card>
+        <card v-for="app in apps.apps" :app="app" :key="app.app_name"></card>
       </div>
     </div>
     <div v-if="display_type == 'pie'">
       <div class="ui horizontal divider"></div>
       <div class="ui six cards">
-        <pie v-for="(apps, environment) in allApps" :apps="apps" :environment="environment"></pie>
+        <pie v-for="(apps, environment) in allApps" :apps="apps" :key="apps.down" :environment="environment"></pie>
       </div>
     </div>
   </div>
@@ -45,7 +45,9 @@
         allApps: {},
         loading: true,
         status_message: null,
-        display_type: 'list'
+        display_type: 'list',
+        interval: null,
+        environments: []
       }
     },
     created: function(){
@@ -58,13 +60,25 @@
                   }
                   this.loading = false;
                 })
+
+      this.interval = setInterval(function () {
+        for (var env in this.environments){
+          this.loadStatuses(this.environments[env]);
+        }
+      }.bind(this), 10000);
     },
     methods: {
       loadStatuses: function(env){
         this.$http.get('/api/v1/statuses/' + env)
                   .then(response => response.json())
                   .then(json => {
-                    this.$set(this.allApps, env, json.statuses);
+                    if (this.allApps.hasOwnProperty(env)){
+                      if (this.allApps[env].down != json.statuses.down && this.allApps[env].up != json.statuses.up){
+                        this.$set(this.allApps, env, json.statuses);
+                      }
+                    } else {
+                      this.$set(this.allApps, env, json.statuses);
+                    }
                   });
       },
       toggleChart: function(type){
