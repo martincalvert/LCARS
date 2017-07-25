@@ -1,3 +1,4 @@
+//= require dropdown_component
 <template>
   <div class="ui modal">
     <i class="close icon"></i>
@@ -26,26 +27,11 @@
           </div>
           <div class="field">
             <label>Expected Response Format</label>
-            <div class="ui selection dropdown">
-              <div class="default text">Select Type</div>
-              <i class="dropdown icon"></i>
-              <input type="hidden" v-model="app.expected_response_format">
-              <div class="menu">
-                <div class="item" data-value="json" v-on:click="setFormat('json')">JSON</div>
-                <div class="item" data-value="xml" v-on:click="setFormat('xml')">XML</div>
-              </div>
-            </div>
+            <dropdown :items="['xml', 'json']" v-model="app.expected_response_format" default-text="Select Environment"></dropdown>
           </div>
           <div class="field">
             <label>Environment</label>
-            <div class="ui selection dropdown">
-              <div class="default text">Select Environment</div>
-              <i class="dropdown icon"></i>
-              <input type="hidden">
-              <div class="menu">
-                <div class="item" v-for="env in environments" :data-value="env" v-on:click="setEnv(env)">{{env}}</div>
-              </div>
-            </div>
+            <dropdown :items="environments" v-model="app.environment" default-text="Select Environment"></dropdown>
           </div>
           <div class="field">
             <label>Expected Response Body</label>
@@ -74,6 +60,7 @@
 </template>
 
 <script>
+  var dropdown = VComponents['dropdown_component']
   module.exports = {
     name: "appModal",
     data: function(){
@@ -89,14 +76,12 @@
           _id: null
         },
         loading: true,
-        environments: [],
         status_message: null
       }
     },
-    props: ["passedApp"],
+    props: ["passedApp", "environments"],
     mounted: function() {
       let v = this;
-      $(".ui.dropdown").dropdown();
       $(".ui.checkbox").checkbox();
       $(".ui.modal").modal({
         onHide: function(){
@@ -106,7 +91,6 @@
       });
     },
     activated: function() {
-      this.fetchEnvironments()
       if (this.passedApp !== null) {
         this.app._id = this.passedApp._id;
         this.app.name = this.passedApp.name;
@@ -144,23 +128,8 @@
           this.status_message = 'Post fail'
         })
       },
-      fetchEnvironments: function(){
-        this.$http.get('/api/v1/settings').then((response) => {
-          this.environments = response.body.settings.envs
-          this.loading = false
-        }, (response) => {
-          // FAILURE
-          this.error = "Post fail";
-        })
-      },
       addUri: function() {
         this.app.uris.push("");
-      },
-      setEnv: function(env){
-        this.app.environment = env;
-      },
-      setFormat: function(format){
-        this.app.expected_response_format = format;
       },
       setEnv: function(env){
         this.app.environment = env;
@@ -179,6 +148,9 @@
         this.appReset();
         $(".ui.modal").modal("hide");
       }
+    },
+    components: {
+      'dropdown': dropdown
     }
   }
 </script>

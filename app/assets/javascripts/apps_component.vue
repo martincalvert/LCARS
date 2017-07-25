@@ -40,7 +40,7 @@
       </div>
     </div>
     <keep-alive>
-      <appModal :passedApp="passedApp" v-on:cancel="cancel" v-on:saved="updateApps" v-if="showModal"></appModal>
+      <appModal :passedApp="passedApp" :environments="environments" v-on:cancel="cancel" v-on:saved="updateApps" v-if="showModal"></appModal>
     </keep-alive>
   </div>
 </template>
@@ -56,10 +56,12 @@
         passedApp: null,
         showModal: false,
         loading: true,
-        status_message: null
+        status_message: null,
+        environments: []
       }
     }, created: function() {
       this.loadApps();
+      this.fetchEnvironments();
     }, methods: {
       loadApps: function() {
         this.$http.get("/api/v1/apps").then((response) => {
@@ -68,6 +70,16 @@
         }, (response) => {
           this.status_message = 'Failed to load apps'
         })
+      },
+      fetchEnvironments: function(){
+        this.$http.get('/api/v1/settings')
+                  .then(response => response.json())
+                  .then(json => {
+                    this.environments = json.settings.envs
+                  }, (response) => {
+                    // FAILURE
+                    this.error = "Post fail";
+                  })
       },
       cancel: function(){
         this.showModal = false;
