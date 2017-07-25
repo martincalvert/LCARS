@@ -6,9 +6,12 @@ class StatusesController < ApplicationController
   def index
     params.permit(:environment)
     apps = Status.where(enabled: true, environment: params[:environment]).to_a
+    up = 0
+    down = 0
+    apps.each { |app| app.alive ? up += 1 : down += 1 }
     respond_to do |format|
       format.json do
-        render json: { statuses: apps }
+        render json: { statuses: { apps: apps, down: down, up: up } }
       end
     end
   end

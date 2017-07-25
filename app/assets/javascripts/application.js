@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require semantic_ui/semantic_ui
+//= require chart_js/chart
 //= require vue
 //= require vue-router
 //= require vue-resource
