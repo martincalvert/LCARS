@@ -24,7 +24,6 @@
   		}
   	},
   	mounted() {
-  		console.log('init the dropdown');
   		var t = this;
   		$(t.$el).dropdown('refresh').dropdown({onChange: function (value, text, $choice) {
   			t.$emit('input', value);

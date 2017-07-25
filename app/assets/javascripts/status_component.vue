@@ -3,19 +3,21 @@
 <template>
   <div class="ui container">
     <div class="ui divider horizontal"></div>
-    <h1>Current Statuses</h1>
+    <div class="ui row">
+      <h2 class="ui header">
+        <div class="content">Current Statuses</div>
+      </h2>
+      <button class="ui icon button violet" v-on:click="toggleChart('pie')">
+        <i class="pie chart icon"></i>
+      </button>
+      <button class="ui icon button purple" v-on:click="toggleChart('list')">
+        <i class="unordered list icon"></i>
+      </button>
+    </div>
     <div class="ui active modal" v-if="loading">
       <div class="ui active inverted dimmer">
         <div class="ui text loader">Loading</div>
       </div>
-    </div>
-    <div class="ui row">
-      <button class="ui icon button" v-on:click="toggleChart('pie')">
-        <i class="pie chart icon"></i>
-      </button>
-      <button class="ui icon button" v-on:click="toggleChart('list')">
-        <i class="unordered list icon"></i>
-      </button>
     </div>
     <div v-for="(apps, environment) in allApps" :key="apps.length" v-bind:class="{ 'blurred_items': loading }" v-if="display_type == 'list'">
       <div class="ui horizontal divider"></div>
