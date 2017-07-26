@@ -24,7 +24,7 @@ class AppServicesController < ApplicationController
   def save
     app = if id = app_service_params['_id']
             app_service = AppService.find(id)
-            app_service.update_attributes(app_service_params)
+            app_service if app_service.update_attributes!(app_service_params)
           else
             AppService.create(app_service_params)
           end

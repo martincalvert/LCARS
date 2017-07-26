@@ -38,8 +38,8 @@
             <input type="text" v-model="app.expected_response_body">
           </div>
           <div class="inline field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" tabindex="0" v-on:change="enabler">
+            <div class="ui toggle checkbox" v-on:click="enabler">
+              <input type="checkbox" tabindex="0">
               <label>Toggle</label>
             </div>
           </div>

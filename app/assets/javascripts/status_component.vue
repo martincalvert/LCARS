@@ -4,9 +4,9 @@
   <div class="ui container">
     <div class="ui divider horizontal"></div>
     <div class="ui row">
-      <h2 class="ui header">
+      <h1 class="ui header">
         <div class="content">Current Statuses</div>
-      </h2>
+      </h1>
       <button class="ui icon button violet" v-on:click="toggleChart('pie')">
         <i class="pie chart icon"></i>
       </button>
@@ -21,14 +21,14 @@
     </div>
     <div v-for="(apps, environment) in allApps" :key="apps.length" v-bind:class="{ 'blurred_items': loading }" v-if="display_type == 'list'">
       <div class="ui horizontal divider"></div>
-      <h2>{{ environment }}</h2>
-      <div class="ui six cards" >
+      <h3>{{ environment }}</h3>
+      <div class="ui ten cards" >
         <card v-for="app in apps.apps" :app="app" :key="app.app_name"></card>
       </div>
     </div>
     <div v-if="display_type == 'pie'">
       <div class="ui horizontal divider"></div>
-      <div class="ui six cards">
+      <div class="ui five cards">
         <pie v-for="(apps, environment) in allApps" :apps="apps" :key="apps.down" :environment="environment"></pie>
       </div>
     </div>
