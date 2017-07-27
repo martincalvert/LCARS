@@ -34,7 +34,7 @@
             </tr>
           </thead>
           <tbody>
-            <appRow v-for="app in apps" :app="app" v-on:edit="setPassed" v-on:delete="deleteApp"></appRow>
+            <appRow v-for="app in apps" :app="app" :key="app._id" v-on:edit="setPassed" v-on:delete="deleteApp"></appRow>
           </tbody>
         </table>
       </div>
@@ -90,7 +90,12 @@
       },
       updateApps: function(app) {
         let t = JSON.parse(app);
-        this.apps.push(t);
+        let index = this.apps.findIndex(x => x._id.$oid == t._id.$oid)
+        if (index > -1){
+          this.apps.splice(index, 1, t)
+        } else {
+          this.apps.push(t);
+        }
         this.showModal = false;
       },
       setPassed: function(app) {
