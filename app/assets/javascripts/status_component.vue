@@ -65,7 +65,7 @@
         for (var env in this.environments){
           this.loadStatuses(this.environments[env]);
         }
-      }.bind(this), 10000);
+      }.bind(this), 30000);
     },
     methods: {
       loadStatuses: function(env){

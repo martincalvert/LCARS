@@ -3,9 +3,9 @@ class AppService
   include Mongoid::Document
 
   field :name, type: String
-  field :uris, type: Array, default: []
-  field :expected_response_code, type: Integer, default: '200'
-  field :expected_response_format, type: String, default: 'json'
+  field :uri, type: String
+  field :expected_response_code, type: Integer, default: 200
+  field :expected_response_format, type: String
   field :expected_response_body, type: String
   field :enabled, type: Boolean, default: false
   field :environment, type: String
@@ -15,7 +15,7 @@ class AppService
   after_save :update_status
 
   def self.permitted_fields
-    %i[name expected_response_code expected_response_format expected_response_body environment enabled]
+    %i[name expected_response_code expected_response_format expected_response_body environment enabled uri]
   end
 
   def delete_status
@@ -34,18 +34,17 @@ class AppService
   end
 
   def fetch_status
-    uris.each do |url|
-      response = Typhoeus.get(url) rescue false
-      alive = response.respond_to?(:success?) ? response.success? : response
-      if alive and expected_response_format.present?
-        alive = expected_response_format.present? and response.headers['Content-Type'] =~ /#{expected_response_format}/
-      end
-      if alive and expected_response_body.present?
-        alive = expected_response_body.present? and response.body == expected_response_body if alive
-      end
-      status.alive = alive
-      status.save!
+    response = Typhoeus.get(uri) rescue false
+    alive = response.respond_to?(:success?) ? response.success? : response
+    alive = response.code == expected_response_code if alive
+    if alive and expected_response_format.present?
+      alive = expected_response_format.present? and response.headers['Content-Type'] =~ /#{expected_response_format}/
     end
+    if alive and expected_response_body.present?
+      alive = expected_response_body.present? and response.body == expected_response_body if alive
+    end
+    status.alive = alive
+    status.save!
   end
 
   def status

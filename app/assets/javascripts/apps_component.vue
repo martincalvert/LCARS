@@ -25,7 +25,7 @@
           <thead class="full-width">
             <tr>
               <th class="single line">Name</th>
-              <th>URIs</th>
+              <th>URI</th>
               <th>Response Code</th>
               <th>Response Format</th>
               <th>Environment</th>

@@ -46,7 +46,7 @@ class AppServicesController < ApplicationController
   private
 
   def app_service_params
-    params.require(:app).permit(AppService.permitted_fields, uris: [], _id: {}).to_h
+    params.require(:app).permit(AppService.permitted_fields, _id: {}).to_h
   end
 
   def destroy_id
