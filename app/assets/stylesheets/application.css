@@ -18,3 +18,14 @@
 .blurred_items {
   filter: blur(2px);
 }
+
+@media only screen and ( max-width: @largestMobileScreen ) {
+  .not.mobile {
+    display: none !important;
+  }
+}
+@media only screen and ( min-width: @tabletBreakpoint ) {
+  .only.mobile {
+    display: none !important;
+  }
+}

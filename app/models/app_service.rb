@@ -36,7 +36,14 @@ class AppService
   def fetch_status
     uris.each do |url|
       response = Typhoeus.get(url) rescue false
-      status.alive = response.respond_to?(:success?) ? response.success? : response
+      alive = response.respond_to?(:success?) ? response.success? : response
+      if alive and expected_response_format.present?
+        alive = expected_response_format.present? and response.headers['Content-Type'] =~ /#{expected_response_format}/
+      end
+      if alive and expected_response_body.present?
+        alive = expected_response_body.present? and response.body == expected_response_body if alive
+      end
+      status.alive = alive
       status.save!
     end
   end

@@ -22,7 +22,7 @@
     <div v-for="(apps, environment) in allApps" :key="apps.length" v-bind:class="{ 'blurred_items': loading }" v-if="display_type == 'list'">
       <div class="ui horizontal divider"></div>
       <h3>{{ environment }}</h3>
-      <div class="ui ten cards" >
+      <div class="ui eight cards doubling" >
         <card v-for="app in apps.apps" :app="app" :key="app.app_name"></card>
       </div>
     </div>
