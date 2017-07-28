@@ -6,9 +6,7 @@
       </h2>
     </td>
     <td>
-      <span v-for="uri in app.uris">
-        {{uri}} <br>
-      </span>
+        {{app.uri}}
     </td>
     <td>
       {{app.expected_response_code}}

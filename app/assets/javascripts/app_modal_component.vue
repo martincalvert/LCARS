@@ -15,15 +15,15 @@
         <form class="ui form">
           <div class="field">
             <label>Name</label>
-            <input type="text" placeholder="App Name" v-model="app.name">
+            <input type="text" placeholder="App Name" v-model="app.name" name="name">
           </div>
           <div class="field">
-            <label>URIs <i class="plus icon" v-on:click="addUri"></i></label>
-            <input v-for="n in app.uris.length" type="url" v-model="app.uris[n-1]">
+            <label>URI</label>
+            <input type="url" v-model="app.uri" name="uri">
           </div>
           <div class="field">
             <label>Expected Response Code</label>
-            <input type="number" v-model="app.expected_response_code">
+            <input type="number" v-model="app.expected_response_code" name="code">
           </div>
           <div class="field">
             <label>Expected Response Format</label>
@@ -67,9 +67,9 @@
       return {
         app: {
           name: null,
-          uris: [''],
+          uri: null,
           expected_response_code: 200,
-          expected_response_format: "json",
+          expected_response_format: null,
           expected_response_body: null,
           enabled: false,
           environment: null,
@@ -89,12 +89,36 @@
           t.$emit("cancel");
         }
       });
+      $(".ui.form").form({
+        on: "blur",
+        inline: true,
+        fields: {
+          code: {
+            identifier  : 'code',
+            rules: [
+              {
+                type   : 'integer[100..599]',
+                prompt : 'Please enter a valid HTTP response code'
+              }
+            ]
+          },
+          uri: {
+            identifier  : 'uri',
+            rules: [
+              {
+                type   : 'url',
+                prompt : 'Please enter a valid URL'
+              }
+            ]
+          }
+        }
+      })
     },
     activated: function() {
       if (this.passedApp !== null) {
         this.app._id = this.passedApp._id;
         this.app.name = this.passedApp.name;
-        this.app.uris = this.passedApp.uris;
+        this.app.uri = this.passedApp.uri;
         this.app.expected_response_code = this.passedApp.expected_response_code;
         this.app.expected_response_body = this.passedApp.expected_response_body;
         this.app.expected_response_format = this.passedApp.expected_response_format;
@@ -116,6 +140,10 @@
       },
       saveApp: function() {
         let token = document.head.querySelector("[name=csrf-token]").content;
+        if (!$(".ui.form").form("is valid")){
+          this.status_message = "App is not valid, please check the URI and Response Code"
+          return
+        }
         this.$http.post("api/v1/apps", {"authenticity_token": token, "app": this.app}).then((response) => {
           if(response.body.saved){
             $(".ui.modal").modal("hide");
@@ -128,9 +156,6 @@
           this.status_message = 'Post fail'
         })
       },
-      addUri: function() {
-        this.app.uris.push("");
-      },
       setEnv: function(env){
         this.app.environment = env;
       },
@@ -139,9 +164,9 @@
       },
       appReset: function() {
         this.app.name = null;
-        this.app.uris = [""];
+        this.app.uri = null;
         this.app.expected_response_code = 200;
-        this.app.expected_response_format = "json";
+        this.app.expected_response_format = null;
         this.app.expected_response_body = null;
       },
       cancelApp: function() {

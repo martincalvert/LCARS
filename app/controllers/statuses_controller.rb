@@ -5,7 +5,7 @@ class StatusesController < ApplicationController
 
   def index
     params.permit(:environment)
-    AppService.where(environment: params[:environment]).map(&:fetch_status)
+    # AppService.where(environment: params[:environment]).map(&:fetch_status)
     apps = Status.where(enabled: true, environment: params[:environment]).to_a
     up = 0
     down = 0
