@@ -11,6 +11,8 @@ services:
       - mongo
     environment:
       MONGO_HOST: mongo
+    volumes:
+      - .:/srv/lcars
   cron:
     build: .
     command: bundle exec rake lcars:cron
