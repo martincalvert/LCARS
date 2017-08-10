@@ -10,13 +10,13 @@ production:
     log_level: :debug
     raise_not_found_error: false
 
-<% %w(development build test).each do |env| %>
+<% %w(development docker build test).each do |env| %>
 <%= "#{env}:" %>
   clients:
     default:
       database: lcars-<%= env %>
       hosts:
-      - localhost:<%= ENV['MONGO_PORT'] || 27017 %>
+      - <%= ENV['MONGO_HOST'] || 'localhost'%>:<%= ENV['MONGO_PORT'] || 27017 %>
       options:
         max_pool_size: 50
         wait_queue_timeout: 10
