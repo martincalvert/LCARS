@@ -17,6 +17,6 @@ class ActiveSupport::TestCase
 
   # Params needed to build a settings object
   def settings_params
-    { name: 'test', envs: %w[qa test], check_duration: 90 }
+    { name: 'test', environments: %w[qa test], check_duration: 90 }
   end
 end

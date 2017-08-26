@@ -5,7 +5,7 @@
         <h5 class="ui header">
           <i class="thumbs icon" v-bind:class="{ 'up green': app.alive, 'down red': !app.alive }"></i>
           <div class="content">
-            {{app.app_name}}
+            {{app.name}}
           </div>
         </h5>
       </div>

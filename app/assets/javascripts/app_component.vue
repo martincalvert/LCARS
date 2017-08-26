@@ -1,18 +1,15 @@
 <template>
   <tr>
     <td>
-      <h2 class="ui center aligned header">
+      <h3 class="ui center aligned header">
         {{app.name}}
-      </h2>
+      </h3>
     </td>
     <td>
         {{app.uri}}
     </td>
     <td>
       {{app.expected_response_code}}
-    </td>
-    <td>
-      {{app.expected_response_format}}
     </td>
     <td>
       {{app.environment}}
@@ -22,10 +19,10 @@
     </td>
     <td>
       <div class="actions">
-        <div class="ui orange icon button" v-on:click="emit('delete')">
+        <div class="ui orange icon button" v-on:click="deleteApp(app)">
           <i class="trash icon"></i>
         </div>
-        <div class="ui teal icon button" v-on:click="emit('edit')">
+        <div class="ui teal icon button" v-on:click="setModalApp(app)">
           <i class="edit icon"></i>
         </div>
       </div>
@@ -41,9 +38,12 @@
     },
     props: ["app"],
     methods: {
-      emit: function(action) {
-        this.$emit(action, this.app);
-      }
+      ...Vuex.mapActions([
+        'deleteApp'
+      ]),
+      ...Vuex.mapMutations([
+        'setModalApp'
+      ])
     }
   }
 </script>

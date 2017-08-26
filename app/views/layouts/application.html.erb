@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>LCARS</title>
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <title>lcars Status</title>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= csrf_meta_tags %>
   </head>
   <body>
     <div id="app">
       <nav>
-        <div class="ui secondary pointing menu">
+        <div class="ui top pointing menu fixed">
           <router-link class="item" :to="{name: 'status'}">Status</router-link>
           <div class="right menu">
             <router-link class="item" :to="{name: 'apps'}">Apps</router-link>
@@ -16,8 +16,23 @@
           </div>
         </div>
       </nav>
-      <%= yield %>
+      <div class="ui active modal" v-if="this.$store.getters.loading">
+        <div class="ui active inverted dimmer">
+          <div class="ui text loader">Loading</div>
+        </div>
+      </div>
+      <div class="ui divider horizontal"></div>
+      <div class="row" v-if="this.$store.getters.statusMessage">
+        <div class="six wide">
+          <div class="ui message">
+            <div class="content">{{ this.$store.getters.statusMessage }}</div>
+          </div>
+        </div>
+      </div>
+      <div v-bind:class="{ 'blurred_items': this.$store.getters.loading }">
+        <%= yield %>
+      </div>
     </div>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application' %>
   </body>
 </html>

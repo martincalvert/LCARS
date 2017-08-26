@@ -19,7 +19,7 @@
   filter: blur(2px);
 }
 
-@media only screen and ( max-width: @largestMobileScreen ) {
+/*@media only screen and ( max-width: @largestMobileScreen ) {
   .not.mobile {
     display: none !important;
   }
@@ -28,4 +28,4 @@
   .only.mobile {
     display: none !important;
   }
-}
+}*/
