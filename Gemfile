@@ -25,6 +25,8 @@ source 'https://rubygems.org' do
   gem 'json'
   gem 'rufus-scheduler'
 
+  gem 'httparty'
+
   ## development, test-only gems
   group :development, :test do
     gem 'byebug'

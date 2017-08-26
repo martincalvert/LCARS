@@ -10,7 +10,7 @@ class SettingsController < ApplicationController
         if settings.present?
           render json: { settings: settings }
         else
-          render json: { no_settings: true }, status: 404
+          render json: { settings: Setting.create }
         end
       end
     end
@@ -33,6 +33,6 @@ class SettingsController < ApplicationController
   private
 
   def settings_params
-    params.require(:settings).permit(Setting.permitted_fields, envs: [], _id: {}).to_h
+    params.require(:settings).permit(Setting.permitted_fields, environments: [], _id: {}).to_h
   end
 end

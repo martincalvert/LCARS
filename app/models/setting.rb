@@ -3,10 +3,10 @@ class Setting
   include Mongoid::Document
 
   field :name, type: String
-  field :envs, type: Array, default: []
+  field :environments, type: Array, default: []
   field :check_duration, type: Integer, default: 10
 
   def self.permitted_fields
-    %i[name envs check_duration]
+    %i[name environments check_duration]
   end
 end

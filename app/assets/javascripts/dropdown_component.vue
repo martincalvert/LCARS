@@ -23,14 +23,14 @@
   			}
   		}
   	},
-  	mounted() {
-  		var t = this;
-  		$(t.$el).dropdown('refresh').dropdown({onChange: function (value, text, $choice) {
-  			t.$emit('input', value);
-  		}});
-  	},
     updated() {
       $(this.$el).dropdown()
+      var t = this;
+  		$(t.$el).dropdown('refresh').dropdown({
+        onChange: function (value, text, $choice) {
+    			t.$emit('input', value);
+    		}
+      });
     }
   }
 </script>

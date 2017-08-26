@@ -1,37 +1,29 @@
 <template>
   <div class="ui grid">
     <div class="ui divider horizontal"></div>
-    <div class="ui active modal" v-if="loading">
-      <div class="ui active inverted dimmer">
-        <div class="ui text loader">Loading</div>
-      </div>
-    </div>
-    <div class="row" v-bind:class="{ 'blurred_items': loading }">
+    <div class="row">
       <div class="eight wide column centered">
         <div class="row single line">
           <h1>
             Settings
           </h1>
         </div>
-        <div class="row" v-if="status_message">
-          <div class="six wide column centered">
-            <div class="ui green segment raised">{{status_message}}</div>
-          </div>
-        </div>
         <form class="ui form">
           <div class="field">
             <label>Name</label>
-            <input type="text" placeholder="Name" v-model="settings.name">
+            <input type="text" placeholder="Name" v-model="name">
           </div>
           <div class="field">
             <label>Environments <i class="plus icon" v-on:click="addEnv"></i></label>
-            <div v-for="n in settings.envs.length" :key="settings.envs.id">
-              <input type="url" v-model="settings.envs[n-1]">
+            <div v-if="environments">
+              <div v-for="n in environments.length" :key="environments.length">
+                <input type="url" v-model="environments[n-1]" v-on:blur="updateModel(n-1, $event)">
+              </div>
             </div>
           </div>
           <div class="field">
             <label>Check Duration</label>
-            <input type="number" v-model="settings.check_duration">
+            <input type="number" v-model="check_duration">
           </div>
           <div class="actions">
             <div class="ui cancel red right labeled icon button">
@@ -54,38 +46,54 @@
     name: 'settings',
     data: function(){
       return {
-        settings: {
-          name: null,
-          check_duration: 10,
-          envs: []
-        },
-        loading: true,
-        status_message: null
-      }
-    }, created: function() {
-      this.loadSettings()
-    }, methods: {
-      addEnv: function() {
-        this.settings.envs.push('');
-      },
-      loadSettings: function() {
-        this.$http.get('/api/v1/settings').then((response) => {
-          this.settings = response.body.settings
-          this.loading = false
-        }, (response) => {
-          this.loading = false
-        })
-      },
-      saveSettings: function() {
-        let token = document.head.querySelector("[name=csrf-token]").content;
-        this.$http.post('/api/v1/settings', {'authenticity_token': token, 'settings': this.settings}).then((response) => {
-          this.status_message = 'Settings Saved'
-        }, (response) => {
-          this.status_message = 'Failed to save settings'
-        })
       }
     },
-    components: {
+    methods: {
+      addEnv() {
+        let envs = Array.from(this.environments);
+        envs.push('')
+        this.environments = envs
+      },
+      updateModel(index, event) {
+        if (event.target.value.length > 0) {
+          let envs = Array.from(this.environments);
+          envs[index] = event.target.value
+          this.environments = envs
+        }
+      },
+      ...Vuex.mapActions([
+        'saveSettings'
+      ])
+    },
+    computed: {
+      ...Vuex.mapGetters([
+        'formSettings',
+        'statusMessage'
+      ]),
+      name: {
+        get () {
+          return this.formSettings.name
+        },
+        set (value) {
+          this.$store.commit('setFormSettingsField', { field: 'name', value: value })
+        }
+      },
+      environments: {
+        get () {
+          return this.formSettings.environments
+        },
+        set (value) {
+          this.$store.commit('setFormSettingsField', { field: 'environments', value: value })
+        }
+      },
+      check_duration: {
+        get () {
+          return this.formSettings.check_duration
+        },
+        set (value) {
+          this.$store.commit('setFormSettingsField', { field: 'check_duration', value: value })
+        }
+      }
     }
   }
 </script>
